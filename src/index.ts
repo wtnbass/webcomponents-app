@@ -1,12 +1,10 @@
 import "@webcomponents/webcomponentsjs";
 
-import { define } from "./lib/define";
 import { PureElement } from "./lib/pure-element";
 import "./counter-app/counter-app";
 import "./todos-app/todos-app";
 
-@define("webcomponents-app")
-export class App extends PureElement {
+class App extends PureElement {
   render() {
     return `
       <section>
@@ -20,3 +18,5 @@ export class App extends PureElement {
     `;
   }
 }
+
+customElements.define("webcomponents-app", App);

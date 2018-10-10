@@ -1,29 +1,33 @@
 import { LitElement, html, property, query } from "@polymer/lit-element";
-import { store, State } from "../store";
-import { connect, ConnectedElement } from "../lib/connect";
 import { Todo } from "./types";
-import * as actions from "./actions";
-import { define } from "../lib/define";
+import { addTodo, toggleComplete } from "./actions";
+import { StateChangedEvent } from "../inject-store";
+import { bindActions } from "../store";
 
-@define("todos-app")
-@connect(store)
-export class TodosApp extends LitElement implements ConnectedElement<State> {
+import "../inject-store";
+
+class TodosApp extends LitElement {
   @property()
   todos: Todo[] = [];
 
   @query("#todo-input")
   input!: HTMLInputElement;
 
+  actions = bindActions({
+    addTodo,
+    toggleComplete
+  });
+
   addTodo = () => {
-    store.dispatch(actions.addTodo(this.input.value));
+    this.actions.addTodo(this.input.value);
     this.input.value = "";
   };
 
-  toggleComplete = (id: number) => store.dispatch(actions.toggleComplete(id));
+  toggleComplete = (id: number) => this.actions.toggleComplete(id);
 
-  stateChangedCallback(state: State) {
-    this.todos = state.todos;
-  }
+  onStateChanged = (e: StateChangedEvent) => {
+    this.todos = e.detail.state.todos;
+  };
 
   render() {
     return html`
@@ -32,6 +36,7 @@ export class TodosApp extends LitElement implements ConnectedElement<State> {
           text-decoration: line-through;
         }
       </style>
+      <inject-store @state-changed=${this.onStateChanged}></inject-store>
       <ul>
         ${this.todos.map(
           todo => html`
@@ -51,3 +56,5 @@ export class TodosApp extends LitElement implements ConnectedElement<State> {
   `;
   }
 }
+
+customElements.define("todos-app", TodosApp);

@@ -1,28 +1,35 @@
 import { html, LitElement, property } from "@polymer/lit-element";
-import { store, State } from "../store";
-import { connect, ConnectedElement } from "../lib/connect";
 import { increment, decrement } from "./actions";
-import { define } from "../lib/define";
+import { bindActions } from "../store";
+import { StateChangedEvent } from "../inject-store";
 
-@define("counter-app")
-@connect(store)
-export class CounterApp extends LitElement implements ConnectedElement<State> {
+import "../inject-store";
+
+class CounterApp extends LitElement {
   @property()
   count = 0;
 
-  increment = () => store.dispatch(increment());
+  actions = bindActions({
+    increment,
+    decrement
+  });
 
-  decrement = () => store.dispatch(decrement());
+  increment = () => this.actions.increment();
 
-  stateChangedCallback(state: State) {
-    this.count = state.count;
-  }
+  decrement = () => this.actions.decrement();
+
+  onStateChanged = (e: StateChangedEvent) => {
+    this.count = e.detail.state.count;
+  };
 
   render() {
     return html`
+      <inject-store @state-changed=${this.onStateChanged}></inject-store>
       <div>${this.count}</div>
       <button @click=${this.increment}>+</button>
       <button @click=${this.decrement}>-</button>
     `;
   }
 }
+
+customElements.define("counter-app", CounterApp);
