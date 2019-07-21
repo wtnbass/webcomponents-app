@@ -1,4 +1,9 @@
-import { createAction } from "typesafe-actions";
+export const increment = () => ({
+  type: "counter/INCREMENT" as "counter/INCREMENT"
+});
 
-export const increment = createAction("counter/INCREMENT");
-export const decrement = createAction("counter/DECREMENT");
+export const decrement = () => ({
+  type: "counter/DECREMENT" as "counter/DECREMENT"
+});
+
+export type Action = ReturnType<typeof increment | typeof decrement>;

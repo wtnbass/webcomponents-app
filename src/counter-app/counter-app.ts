@@ -1,9 +1,9 @@
-import { html, LitElement, property } from "@polymer/lit-element";
+import { html, LitElement, property } from "lit-element";
 import { increment, decrement } from "./actions";
 import { bindActions } from "../store";
-import { StateChangedEvent } from "../inject-store";
+import { StateChangedEvent } from "../elements/inject-store";
 
-import "../inject-store";
+import "../elements/inject-store";
 
 class CounterApp extends LitElement {
   @property()

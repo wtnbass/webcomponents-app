@@ -1,10 +1,11 @@
-import { LitElement, html, property, query } from "@polymer/lit-element";
-import { Todo } from "./types";
+import { LitElement, html, property, query } from "lit-element";
+import { repeat } from "lit-html/directives/repeat";
+import { Todo } from "./todo";
 import { addTodo, toggleComplete } from "./actions";
-import { StateChangedEvent } from "../inject-store";
+import { StateChangedEvent } from "../elements/inject-store";
 import { bindActions } from "../store";
 
-import "../inject-store";
+import "../elements/inject-store";
 
 class TodosApp extends LitElement {
   @property()
@@ -38,22 +39,23 @@ class TodosApp extends LitElement {
       </style>
       <inject-store @state-changed=${this.onStateChanged}></inject-store>
       <ul>
-        ${this.todos.map(
+        ${repeat(
+          this.todos,
           todo => html`
-          <li
-            class="${todo.completed ? "todo-completed" : ""}"
-            @click=${() => this.toggleComplete(todo.id)}
+            <li
+              class="${todo.completed ? "todo-completed" : ""}"
+              @click=${() => this.toggleComplete(todo.id)}
             >
-            ${todo.text}
-          </li>
-        `
+              ${todo.text}
+            </li>
+          `
         )}
       </ul>
       <div>
-        <input type="text" id="todo-input">
+        <input type="text" id="todo-input" />
         <button @click=${this.addTodo}>Add</button>
       </div>
-  `;
+    `;
   }
 }
 

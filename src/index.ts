@@ -1,6 +1,6 @@
 import "@webcomponents/webcomponentsjs";
 
-import { PureElement } from "./lib/pure-element";
+import { PureElement } from "./elements/pure-element";
 import "./counter-app/counter-app";
 import "./todos-app/todos-app";
 

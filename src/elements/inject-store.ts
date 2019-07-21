@@ -1,7 +1,7 @@
-import { store, State } from "./store";
+import { store, StoreState } from "../store";
 import { Unsubscribe } from "redux";
 
-export type StateChangedEvent = CustomEvent<{ state: State }>;
+export type StateChangedEvent = CustomEvent<{ state: StoreState }>;
 
 export class InjectStore extends HTMLElement {
   unsubscribe!: Unsubscribe;

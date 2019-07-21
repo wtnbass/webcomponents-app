@@ -1,19 +1,15 @@
-import { createAction } from "typesafe-actions";
-import { Todo } from "./types";
+import { newTodo } from "./todo";
 
-let nextId = 0;
-const newTodo = (text: string): Todo => ({
-  id: nextId++,
-  text,
-  completed: false
+export const addTodo = (text: string) => ({
+  type: "todos/ADD_TODO" as "todos/ADD_TODO",
+  payload: newTodo(text)
 });
 
-export const addTodo = createAction(
-  "todos/ADD_TODO",
-  resolve => (text: string) => resolve(newTodo(text))
-);
+export const toggleComplete = (id: number) => ({
+  type: "todos/TOGGLE_COMPLETE" as "todos/TOGGLE_COMPLETE",
+  payload: id
+});
 
-export const toggleComplete = createAction(
-  "todos/TOGGLE_COMPLETE",
-  resolve => (id: number) => resolve(id)
-);
+export type Action =
+  | ReturnType<typeof addTodo>
+  | ReturnType<typeof toggleComplete>;
